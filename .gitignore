@@ -1,0 +1,5 @@
+*.swp
+.netrwhist
+home/.vim/bundle/*
+home/.oh-my-zsh/*
+!home/.vim/bundle/vundle

@@ -1,0 +1,14 @@
+[user]
+	name = Chris Fitzpatrick 
+	email = chrisfitzpat@gmail.com
+[color]
+	ui = true
+[push]
+	default = current
+[core]
+	editor = /usr/bin/vim
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
