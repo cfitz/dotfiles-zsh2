@@ -1,16 +1,17 @@
-set nocompatible               " be iMproved
+set nocompatible               " Use modern vim features
 
 "  ---------------------------------------------------------------------------
 "  Plugins
 "  ---------------------------------------------------------------------------
 
-silent! runtime bundles.vim
+" Load vim-plug plugins from bundles.vim
+runtime bundles.vim
 
 "  ---------------------------------------------------------------------------
 "  General
 "  ---------------------------------------------------------------------------
 
-filetype plugin indent on     
+filetype plugin indent on
 let mapleader = ","
 let g:mapleader = ","
 set modelines=0
@@ -18,8 +19,11 @@ set history=1000
 set nobackup
 set nowritebackup
 set noswapfile
-syntax enable
+set undofile
+set undodir=~/.vim/undo
 set autoread
+set autowrite
+syntax enable
 
 "  ---------------------------------------------------------------------------
 "  UI
@@ -34,7 +38,7 @@ set showmode
 set showcmd
 set hidden
 set wildmenu
-set wildmode=list:longest
+set wildmode=list:longest:full
 set visualbell
 set cursorline
 set ttyfast
@@ -42,20 +46,30 @@ set ruler
 set backspace=indent,eol,start
 set laststatus=2
 set number
-" set relativenumber
-set undofile
+set splitbelow
+set splitright
+set nowrap
+set textwidth=100
+set colorcolumn=100
 
-" Auto adjust window sizes when they become current
+" Window sizing
 set winwidth=84
 set winheight=5
 set winminheight=5
 set winheight=999
 
-colorscheme eighties 
+" Theme configuration
+if has('termguicolors')
+  set termguicolors
+  try
+    colorscheme base16-default-dark
+  catch /^Vim\%((\a\+)\)\=:E185/
+    colorscheme eighties
+  endtry
+else
+  colorscheme eighties
+endif
 set background=dark
-set t_Co=256
-
-set splitbelow splitright
 
 "  ---------------------------------------------------------------------------
 "  Text Formatting
@@ -65,39 +79,77 @@ set tabstop=2
 set shiftwidth=2
 set softtabstop=2
 set expandtab
-
-set nowrap
-set textwidth=79
 set formatoptions=n
 
-" check to make sure vim has been compiled with colorcolumn support
-" before enabling it
-if exists("+colorcolumn")
-  highlight ColorColumn ctermbg=246
-  let &colorcolumn=join(range(81,999),",")
-endif
+"  ---------------------------------------------------------------------------
+"  Mappings
+"  ---------------------------------------------------------------------------
+
+" Quick edit and reload vimrc
+nnoremap <leader>ev :edit $MYVIMRC<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
+
+" Use jj to escape insert mode
+inoremap jj <ESC>
+
+" Better navigation in wrapped lines
+nnoremap j gj
+nnoremap k gk
+
+" Quick buffer movement
+nnoremap <leader>bn :bnext<CR>
+nnoremap <leader>bp :bprevious<CR>
+
+" Fzf mappings
+nnoremap <C-p> :Files<CR>
+nnoremap <C-b> :Buffers<CR>
+nnoremap <leader>/ :BLines<CR>
+nnoremap <leader>? :Lines<CR>
+
+" Clear search highlight
+nnoremap <leader>cc :nohlsearch<CR>
 
 "  ---------------------------------------------------------------------------
 "  Status Line
 "  ---------------------------------------------------------------------------
 
-" path
-set statusline=%f
-" flags
-set statusline+=%m%r%h%w
-" git branch
-set statusline+=\ %{fugitive#statusline()}
-" encoding
-set statusline+=\ [%{strlen(&fenc)?&fenc:&enc}]
-" rvm
-" set statusline+=\ %{rvm#statusline()}
-" line x of y
-set statusline+=\ [line\ %l\/%L]
+if exists(':AirlineTheme')
+  let g:airline_theme = 'base16_default'
+  let g:airline_powerline_fonts = 1
+endif
 
-" Colour
-hi StatusLine ctermfg=Black ctermbg=White
+"  ---------------------------------------------------------------------------
+"  Plugin Configuration
+"  ---------------------------------------------------------------------------
 
-" Change colour of statusline in insert mode
+" coc.nvim configuration
+let g:coc_python_python_path = 'python3'
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" FZF configuration
+let $FZF_DEFAULT_COMMAND = 'find . -type f -not -path "*/\.*"'
+
+" vim-gitgutter configuration
+set signcolumn=yes
+
+" Neoformat configuration
+let g:neoformat_basic_format_align = 1
+let g:neoformat_basic_format_retab = 1
+let g:neoformat_basic_format_trim = 1
+
+"  ---------------------------------------------------------------------------
+"  File-type Specific
+"  ---------------------------------------------------------------------------
+
+autocmd FileType ruby setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4
+autocmd FileType javascript setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType json setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType html setlocal tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType css setlocal tabstop=2 shiftwidth=2 softtabstop=2
 au InsertEnter * hi StatusLine ctermbg=DarkBlue
 au InsertLeave * hi StatusLine ctermfg=Black ctermbg=White
 

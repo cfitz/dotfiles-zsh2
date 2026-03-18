@@ -1,70 +1,57 @@
-set nocompatible               " be iMproved
-
-if !isdirectory(expand("~/.vim/bundle/vundle/.git"))
-  !git clone git://github.com/gmarik/vundle.git ~/.vim/bundle/vundle
+" vim-plug configuration (https://github.com/junegunn/vim-plug)
+" Install vim-plug if not already installed
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
-filetype off                   " must be off before Vundle has run
+call plug#begin('~/.vim/plugged')
 
-set runtimepath+=~/.vim/bundle/vundle/
+" Essential plugins
+Plug 'tpope/vim-sensible'              " Modern vim defaults
+Plug 'tpope/vim-fugitive'              " Git integration
+Plug 'tpope/vim-surround'              " Delete/change/add surroundings
+Plug 'tpope/vim-commentary'            " Comment out code
+Plug 'tpope/vim-unimpaired'            " Bracket mappings
+Plug 'tpope/vim-repeat'                " Enhance dot command
+Plug 'tpope/vim-vinegar'               " Netrw enhancements
 
-call vundle#rc()
+" File navigation
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'                " Fuzzy finder
 
-Bundle 'gmarik/vundle'
-Bundle "git://github.com/mileszs/ack.vim.git"
-Bundle "git://github.com/tpope/vim-fugitive"
-Bundle "git://github.com/tpope/vim-rails.git"
-Bundle "git://github.com/tpope/vim-surround.git"
-Bundle "git://github.com/chrismetcalf/vim-yankring.git"
-Bundle "git://github.com/chrismetcalf/vim-taglist.git"
-Bundle "git://github.com/tpope/vim-endwise.git"
-Bundle "git://github.com/scrooloose/syntastic.git"
-Bundle "git://github.com/Townk/vim-autoclose.git"
-Bundle "git://github.com/scrooloose/nerdtree.git"
-Bundle "git://github.com/sophacles/vim-bundle-sparkup.git"
-Bundle "git://github.com/panozzaj/vim-autocorrect.git"
-Bundle "git://github.com/tomtom/tcomment_vim.git"
-Bundle "git://github.com/sjl/gundo.vim.git"
-Bundle "git://github.com/clones/vim-fuzzyfinder.git"
-Bundle "git://github.com/godlygeek/tabular.git"
-Bundle "git://github.com/vim-scripts/Gist.vim.git"
-Bundle "git://github.com/vim-scripts/L9.git"
-Bundle "git://github.com/Bogdanp/rbrepl.vim.git"
-Bundle 'git://git.wincent.com/command-t.git'
-Bundle 'git://github.com/altercation/vim-colors-solarized.git'
-Bundle "git://github.com/kana/vim-textobj-user.git"
-Bundle "git://github.com/nelstrom/vim-textobj-rubyblock.git"
-Bundle "git://github.com/ervandew/supertab.git"
-Bundle "jQuery"
-Bundle "git://github.com/kchmck/vim-coffee-script.git"
-Bundle "git://github.com/pangloss/vim-javascript.git"
-Bundle "git://github.com/cakebaker/scss-syntax.vim.git"
-Bundle "git://github.com/tpope/vim-haml.git"
-Bundle "git://github.com/tpope/vim-markdown.git"
-Bundle "git://github.com/greyblake/vim-preview.git"
-Bundle "git://github.com/tpope/vim-bundler.git"
-Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "tomtom/tlib_vim"
-Bundle "honza/vim-snippets"
-Bundle "garbas/vim-snipmate"
-Bundle 'kien/ctrlp.vim'
-Bundle 'tpope/vim-fugitive'
-Plugin 'pangloss/vim-javascript'
-Plugin 'othree/html5.vim'
-Plugin 'hail2u/vim-css3-syntax'
-Plugin 'mattn/emmet-vim'
-Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-repeat'
-Plugin 'godlygeek/tabular'
-Plugin 'scrooloose/syntastic'
-Plugin 'vim-ruby/vim-ruby'
-Plugin 'zaiste/tmux.vim'
-Plugin 'groenewege/vim-less'
-Plugin 'vadimr/bclose.vim'
-Plugin 'Raimondi/delimitMate'
-Plugin 'tpope/vim-vinegar'
+" Syntax & language support
+Plug 'sheerun/vim-polyglot'            " Language pack
+Plug 'vim-ruby/vim-ruby'               " Ruby support
+Plug 'pangloss/vim-javascript'         " JavaScript support
+Plug 'hail2u/vim-css3-syntax'          " CSS3 syntax
+Plug 'othree/html5.vim'                " HTML5 support
+Plug 'tpope/vim-markdown'              " Markdown support
 
-filetype plugin indent on     " and turn it back on!
+" Completion & intellisense
+Plug 'neoclide/coc.nvim', {'branch': 'release'}  " Intellisense engine
+
+" UI improvements
+Plug 'vim-airline/vim-airline'         " Status line
+Plug 'vim-airline/vim-airline-themes'  " Theme support
+Plug 'chriskempson/base16-vim'         " Base16 color schemes
+
+" Text objects & operators
+Plug 'kana/vim-textobj-user'           " User-defined text objects
+Plug 'kana/vim-textobj-indent'         " Indent text objects
+
+" Formatting & linting
+Plug 'sbdchd/neoformat'                " Code formatting
+Plug 'dense-analysis/ale'              " Linting
+
+" Git visualization
+Plug 'airblade/vim-gitgutter'          " Show git changes in gutter
+
+" Productivity
+Plug 'godlygeek/tabular'               " Text alignment
+Plug 'mattn/emmet-vim'                 " Emmet abbreviation expansion
+
+call plug#end()
+
+filetype plugin indent on

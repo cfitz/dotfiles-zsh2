@@ -1,5 +1,15 @@
 *.swp
 .netrwhist
-home/.vim/bundle/*
-home/.oh-my-zsh/*
-!home/.vim/bundle/vundle
+
+# Vim plugin directories (managed by vim-plug)
+home/.vim/plugged/
+home/.vim/autoload/plug.vim
+
+# Oh-My-Zsh (managed by git submodule)
+home/.oh-my-zsh/
+
+# Vim runtime
+home/.vim/undo/
+
+# Installation backups
+.dotfiles-backup-*/
