@@ -1,260 +1,100 @@
 # Dotfiles
 
-Modern shell configuration and development environment setup.
+Personal dotfiles for Ubuntu (WSL), managed with [GNU Stow](https://www.gnu.org/software/stow/).
+Configures Neovim, Zsh, Git, Starship prompt, and Tmux.
 
 ## Quick Start
 
 ```bash
-git clone <your-repo-url> ~/.dotfiles
-cd ~/.dotfiles
-./install.sh
+git clone <your-repo-url> ~/dotfiles
+cd ~/dotfiles
+bash setup.sh
 ```
 
 ## Installation
 
-### First Time Setup
+`setup.sh` handles everything:
 
 ```bash
-./install.sh
+bash setup.sh
 ```
 
-This will:
-- Create symlinks from `home/` directory to `$HOME`
-- Prompt you if files already exist
-- Automatically backup conflicting files
-- Initialize git submodules (Oh-My-Zsh, Vim plugins)
+This installs:
+- apt packages: `stow`, `git`, `zsh`, `tmux`, `fzf`, `ripgrep`, etc.
+- Neovim (via apt with Neovim PPA)
+- Starship prompt
+- zoxide
 
-### Dry Run (See What Would Happen)
-
-```bash
-./install.sh --dry-run
-```
-
-### Force Install (Overwrite Everything)
-
-```bash
-./install.sh --force
-```
-
-### Skip Git Submodules
-
-```bash
-./install.sh --skip-submodules
-```
-
-### Uninstall
-
-Remove all installed symlinks:
-
-```bash
-./install.sh --uninstall
-```
-
-Backups of replaced files are stored in `~/.dotfiles-backup-YYYYMMDD-HHMMSS/`
-
-## What's Included
-
-### Shell Configuration
-
-- **`.zshrc`** - Zsh configuration with Oh-My-Zsh, Powerlevel10k, and modern tooling
-- **`.p10k.zsh`** - Powerlevel10k theme configuration
-- **`.gitconfig`** - Git configuration with useful aliases
-- **`.gitignore_global`** (optional) - Global git ignore patterns
-
-### Terminal & Editor
-
-- **`.tmux.conf`** - Tmux configuration with sensible defaults
-- **`.vimrc`** - Vim configuration with modern plugins
-- **`.vim/bundles.vim`** - Vim plugin manager (vim-plug) and plugins
-
-### Version Managers
-
-The setup assumes you have one of these installed for version management:
-
-- **fnm** - Fast Node.js version manager (instead of nvm)
-  ```bash
-  curl -fsSL https://fnm.io/install | bash
-  ```
-
-- **asdf** - Unified version manager for multiple languages
-  ```bash
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf
-  ~/.asdf/bin/asdf --version
-  ```
-
-## Post-Installation Steps
-
-### 1. Install Oh-My-Zsh Plugins
-
-Some plugins require manual installation:
-
-```bash
-# Autosuggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions \
-  ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-
-# Syntax highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting \
-  ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-
-# FZF (if not already installed)
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
-```
-
-### 2. Create Vim Undo Directory
-
-```bash
-mkdir -p ~/.vim/undo
-```
-
-### 3. Install Vim Plugins
-
-On first Vim launch, will prompt to install plugins:
-
-```bash
-vim
-:PlugInstall
-```
-
-### 4. Install CoC LSP Extensions (optional)
-
-For language support in Vim/Neovim with CoC:
-
-```vim
-:CocInstall coc-python coc-json coc-html coc-css coc-yaml coc-rust-analyzer
-```
+Then stows all packages: `git zsh starship nvim tmux`
 
 ## Structure
 
+Each top-level directory is a Stow package. Paths inside mirror where symlinks
+land relative to `~`.
+
 ```
-dotfiles/
-├── home/                      # Symlinked to $HOME
-│   ├── .zshrc               # Shell configuration
-│   ├── .tmux.conf           # Tmux configuration
-│   ├── .vimrc               # Vim configuration
-│   ├── .vim/
-│   │   ├── bundles.vim      # Vim plugins (vim-plug)
-│   │   └── colors/          # Color schemes
-│   ├── .gitconfig           # Git configuration
-│   └── .p10k.zsh            # Powerlevel10k theme
-├── install.sh               # Installation script
-└── README.md                # This file
-```
-
-## File Locations
-
-| File | Purpose |
-|------|---------|
-| `.zshrc` | Main shell configuration |
-| `.tmux.conf` | Terminal multiplexer setup |
-| `.vimrc` | Text editor configuration |
-| `.gitconfig` | Git user and alias configuration |
-| `.p10k.zsh` | Prompt theme configuration |
-
-## Customization
-
-### Changing Plugins
-
-Edit `home/.vim/bundles.vim` to add/remove Vim plugins, then run `:PlugInstall` in Vim.
-
-### Changing Shell Aliases
-
-Edit `home/.zshrc` and look for the "Aliases" section.
-
-### Changing Git Aliases
-
-Edit `home/.gitconfig` in the `[alias]` section.
-
-### Customizing Powerlevel10k
-
-Run the interactive configuration wizard:
-
-```bash
-p10k configure
+dotfiles-zsh2/
+├── git/                  # ~/.gitconfig, ~/.config/git/ignore
+├── nvim/                 # ~/.config/nvim/
+│   └── .config/nvim/
+│       ├── init.lua
+│       └── lua/
+│           ├── config/lazy.lua
+│           └── plugins/
+│               ├── ui.lua
+│               ├── treesitter.lua
+│               ├── lsp.lua
+│               ├── completion.lua
+│               ├── telescope.lua
+│               ├── git.lua
+│               ├── formatting.lua
+│               └── editing.lua
+├── starship/             # ~/.config/starship.toml
+├── tmux/                 # ~/.tmux.conf
+├── zsh/                  # ~/.zshrc
+├── setup.sh              # Ubuntu/WSL bootstrap
+├── .stylua.toml          # Lua formatter settings
+└── CLAUDE.md             # Repo documentation
 ```
 
-This updates `~/.p10k.zsh`.
+## What's Included
 
-## Maintenance
+### Shell (Zsh)
 
-### Update Installed Tools
+- **Plugin manager**: Zinit (auto-installed on first launch)
+- **Plugins**: zsh-syntax-highlighting, zsh-completions, zsh-autosuggestions
+- **Prompt**: Starship
+- **Tools**: zoxide (`cd`), fzf, fnm, asdf
+- `~/.secrets.zsh` loaded if present (not committed)
 
-```bash
-# Update fnm
-fnm self-update
+### Neovim
 
-# Update asdf
-cd ~/.asdf && git pull origin master
+- **Plugin manager**: Lazy.nvim (auto-installed on first launch)
+- **LSP**: Mason + lua_ls, pyright, ruff
+- **Fuzzy finder**: Telescope
+- **Completion**: nvim-cmp + LuaSnip
+- **Formatting**: conform.nvim (format on save)
+- **Theme**: base16 Tomorrow Night Eighties
+- Leader key: `,`
 
-# Update Vim plugins
-vim
-:PlugUpdate
+## Adding a New Tool
 
-# Update Oh-My-Zsh
-upgrade_oh_my_zsh
-```
+1. Create a directory at the repo root (e.g., `mytool/`)
+2. Mirror the path from `~` inside it (e.g., `mytool/.config/mytool/config`)
+3. Add the directory name to the `stow` line in `setup.sh`
 
-### Backup/Restore
+## Adding a Neovim Plugin
 
-Automatic backups are created when files conflict during installation:
+Create a file in `nvim/.config/nvim/lua/plugins/<name>.lua` returning a
+Lazy.nvim spec table. Lazy auto-discovers all files in `plugins/`.
 
-```bash
-# Find recent backup
-ls ~/.dotfiles-backup-*/
+## Version Managers
 
-# Restore if needed
-cp ~/.dotfiles-backup-YYYYMMDD-HHMMSS/.zshrc ~/.zshrc
-```
+The `.zshrc` initializes these if installed:
 
-## Troubleshooting
-
-### Installation script won't execute
-
-Make sure it's executable:
-
-```bash
-chmod +x install.sh
-```
-
-### Old symlinks pointing to wrong location
-
-Run with `--force` to update:
-
-```bash
-./install.sh --force
-```
-
-### Submodules not initialized
-
-Initialize manually:
-
-```bash
-git submodule update --init --recursive
-```
-
-### Vim plugins not working
-
-Install vim-plug and plugins:
-
-```bash
-./install.sh  # sets up symlinks
-vim           # opens vim
-:PlugInstall  # installs plugins
-```
-
-## Migration from Homesick
-
-This replaces the old Homesick-based management. The `install.sh` script:
-
-- ✓ Handles symlink creation like Homesick
-- ✓ Backs up conflicting files
-- ✓ Initializes git submodules
-- ✓ No Ruby dependency required
-- ✓ Cross-platform (works on macOS, Linux, WSL)
-
-Simply run `./install.sh` to set up your dotfiles.
+- **fnm** - Node.js: `curl -fsSL https://fnm.vercel.app/install | bash`
+- **asdf** - multi-language: `git clone https://github.com/asdf-vm/asdf.git ~/.asdf`
 
 ## License
 
-Feel free to adapt and modify for your own use.
+Feel free to adapt for your own use.

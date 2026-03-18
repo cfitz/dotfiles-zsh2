@@ -1,15 +1,16 @@
+# Editor
 *.swp
+*.swo
 .netrwhist
 
-# Vim plugin directories (managed by vim-plug)
+# Neovim lazy.nvim data (not tracked)
+nvim/.config/nvim/.lazy/
+
+# Old home/ directory artifacts
 home/.vim/plugged/
 home/.vim/autoload/plug.vim
-
-# Oh-My-Zsh (managed by git submodule)
-home/.oh-my-zsh/
-
-# Vim runtime
 home/.vim/undo/
+home/.oh-my-zsh/
 
 # Installation backups
 .dotfiles-backup-*/

@@ -1,0 +1,68 @@
+[user]
+    name = Chris Fitzpatrick
+    email = chris@tulsa.dog
+
+[core]
+    editor = nvim
+    autocrlf = false
+    safecrlf = warn
+    pager = less -# 10
+    excludesFile = ~/.config/git/ignore
+
+[pager]
+    diff = less -# 10
+    show = less -# 10
+    log = less -# 10
+
+[color]
+    ui = true
+    status = auto
+    branch = auto
+    diff = auto
+    interactive = auto
+
+[color "status"]
+    added = green
+    changed = yellow
+    untracked = red
+
+[init]
+    defaultBranch = main
+
+[push]
+    default = current
+    autoSetupRemote = true
+
+[pull]
+    rebase = false
+
+[fetch]
+    prune = true
+
+[merge]
+    tool = vimdiff
+    conflictstyle = zdiff3
+
+[rebase]
+    autostash = true
+
+[commit]
+    gpgsign = false
+
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+    unstage = restore --staged
+    last = log -1 HEAD
+    visual = log --graph --oneline --all
+    amend = commit --amend --no-edit
+    undo = reset --soft HEAD~1
+    cleanup = "!git branch --merged | grep -v '\\*\\|main\\|master' | xargs -n 1 git branch -d"
+
+[filter "lfs"]
+    process = git-lfs filter-process
+    required = true
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
