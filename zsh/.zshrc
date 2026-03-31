@@ -1,3 +1,30 @@
+HISTFILE=~/.zsh_history
+HISTSIZE=20000
+SAVEHIST=20000
+#setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+unsetopt SHARE_HISTORY
+setopt EXTENDED_HISTORY
+setopt HIST_IGNORE_ALL_DUPS   # ignore duplicates when adding
+setopt HIST_FIND_NO_DUPS      # avoid duplicates when searching
+setopt HIST_REDUCE_BLANKS     # remove extra spaces
+setopt HIST_VERIFY            # show command before executing on search
+setopt HIST_FCNTL_LOCK
+setopt HIST_IGNORE_SPACE
+setopt HIST_SAVE_NO_DUPS
+#
+autoload -Uz add-zsh-hook
+
+save_history() {
+    fc -W
+}
+
+
+add-zsh-hook precmd save_history
+
+
+#
+#
 # --------------------------
 # Zinit bootstrap
 # --------------------------
@@ -103,3 +130,8 @@ alias gl='git log --oneline -10'
 # Machine-local secrets (not committed)
 # --------------------------
 [[ -f ~/.secrets.zsh ]] && source ~/.secrets.zsh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval "$(uv generate-shell-completion zsh)"
